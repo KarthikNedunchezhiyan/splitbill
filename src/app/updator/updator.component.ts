@@ -20,7 +20,6 @@ export class UpdatorComponent implements OnInit {
   total_share_cost: number = 0;
 
   constructor(config: NgbModalConfig, private modalService: NgbModal, private route: ActivatedRoute) {
-    // customize default values of modals used by this component tree
     config.backdrop = 'static';
     config.keyboard = false;
   }
