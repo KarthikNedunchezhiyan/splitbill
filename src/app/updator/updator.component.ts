@@ -29,9 +29,12 @@ export class UpdatorComponent implements OnInit {
     this.route.queryParams
       .subscribe(params => {
         let groceries_list = JSON.parse(atob(decodeURIComponent(params['emb'])));
-        for (let i = 0; i < groceries_list.length; i++)
+        for (let i = 0; i < groceries_list.length; i++) {
           groceries_list[i].share = groceries_list[i].share || 0;
+          this.total_share_cost += groceries_list[i].share;
+        }
         this.groceries = groceries_list;
+        this.refresh_total_share_cost();
       });
   }
 
@@ -39,11 +42,19 @@ export class UpdatorComponent implements OnInit {
     this.modalService.open(content);
   }
 
-  update_share(index: number, item_form: NgForm) {
-    let per_share = this.groceries[index].cost / this.groceries[index].quantity;
-    this.total_share_cost -= per_share * this.groceries[index].share;
+  refresh_total_share_cost() {
+    for (let i = 0; i < this.groceries.length; i++) {
+      let per_share = this.groceries[i].cost / this.groceries[i].quantity;
+      this.total_share_cost += per_share * this.groceries[i].share;
+    }
+  }
 
+  update_share(index: number, item_form: NgForm) {
     this.groceries[index].share = item_form.value.share;
-    this.total_share_cost += per_share * this.groceries[index].share;
+    this.refresh_total_share_cost();
+  }
+
+  serialize_groceries_list() {
+    alert(encodeURIComponent(btoa(JSON.stringify(this.groceries))));
   }
 }
