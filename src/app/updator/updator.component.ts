@@ -42,6 +42,7 @@ export class UpdatorComponent implements OnInit {
   }
 
   refresh_total_share_cost() {
+    this.total_share_cost = 0;
     for (let i = 0; i < this.groceries.length; i++) {
       let per_share = this.groceries[i].cost / this.groceries[i].quantity;
       this.total_share_cost += per_share * this.groceries[i].share;
@@ -54,6 +55,8 @@ export class UpdatorComponent implements OnInit {
   }
 
   serialize_groceries_list() {
-    alert(encodeURIComponent(btoa(JSON.stringify(this.groceries))));
+    let serialized_groceries_data = encodeURIComponent(btoa(JSON.stringify(this.groceries)));
+    console.log(serialized_groceries_data);
+    alert(serialized_groceries_data);
   }
 }
