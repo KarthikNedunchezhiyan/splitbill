@@ -1,6 +1,6 @@
 <div class="btn-toolbar float-right">
   <div class="btn-group">
-    <button class="btn btn-sm btn-outline-success" (click)="serialize_groceries_list()">Generate Hash</button>
+    <button class="btn btn-sm btn-outline-success" (click)="serialize_groceries_list()">Generate & Copy Hash</button>
   </div>
 </div>
 <table class="table">
@@ -20,7 +20,16 @@
     <td>{{item.description}}</td>
     <td>{{item.quantity}}</td>
     <td>{{item.cost}}</td>
-    <td>{{item.share}}</td>
+    <ng-template [ngIf]="item.share == -1">
+      <td class="badge badge-pill badge-info">Fair Split</td>
+    </ng-template>
+    <ng-template [ngIf]="item.share == 0">
+      <td class="badge badge-pill badge-danger">Opted-Out</td>
+    </ng-template>
+    <ng-template [ngIf]="item.share > 0">
+      <td>{{item.share}} <span style="opacity: 0.15">[~=${{share_cost(i)}}]</span></td>
+    </ng-template>
+
     <td>
       <ng-template #content let-c="close" let-d="dismiss">
         <div class="modal-header">
@@ -34,6 +43,22 @@
             <div class="mb-3">
               <input ngModel required type="number" class="form-control" name="share">
             </div>
+            <div class="mb-3">
+              <div class="form-check">
+                <input ngModel class="form-check-input" type="radio" value="fair_split" name="split_mode"
+                       id="fair_split_radio">
+                <label class="form-check-label badge badge-pill badge-info" for="fair_split_radio">
+                  Fair Split
+                </label>
+              </div>
+              <div class="form-check">
+                <input ngModel class="form-check-input" type="radio" value="opt_out" name="split_mode"
+                       id="opt_out_radio">
+                <label class="form-check-label badge badge-pill badge-danger" for="opt_out_radio">
+                  Opt Out
+                </label>
+              </div>
+            </div>
             <div class="modal-footer">
               <button type="submit" class="btn btn-primary float-right">Update Share</button>
             </div>
@@ -45,5 +70,3 @@
   </tr>
   </tbody>
 </table>
-
-<div>Total Share Cost: $ {{total_share_cost}}</div>

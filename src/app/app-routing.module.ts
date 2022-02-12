@@ -1,8 +1,9 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
 import {InitiatorComponent} from "./initiator/initiator.component";
 import {UpdatorComponent} from "./updator/updator.component";
 import {PageNotFoundComponent} from "./page-not-found/page-not-found.component";
+import {TallyComponent} from "./tally/tally.component";
 
 const routes: Routes = [
   {
@@ -14,6 +15,10 @@ const routes: Routes = [
     path: "updater"
   },
   {
+    component: TallyComponent,
+    path: "tally"
+  },
+  {
     component: PageNotFoundComponent,
     path: "**"
   }
@@ -23,4 +28,5 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}

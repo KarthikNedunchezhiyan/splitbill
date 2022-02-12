@@ -19,7 +19,6 @@ export class InitiatorComponent implements OnInit {
   bill_total = 0;
 
   constructor(config: NgbModalConfig, private modalService: NgbModal) {
-    // customize default values of modals used by this component tree
     config.backdrop = 'static';
     config.keyboard = false;
   }
@@ -48,6 +47,7 @@ export class InitiatorComponent implements OnInit {
 
   serialize_groceries_list() {
     let serialized_string = encodeURIComponent(btoa(JSON.stringify(this.groceries)));
-    alert(`/updater?emb=${serialized_string}`);
+    navigator.clipboard.writeText(`/updater?emb=${serialized_string}`);
+    alert("Url copied to clipboard!");
   }
 }

@@ -1,0 +1,58 @@
+<ng-template [ngIf]="groceries_final_list.length == 0">
+  <div class="btn-toolbar float-right">
+    <div class="btn-group">
+      <button class="btn btn-sm btn-outline-success" (click)="generate_bill()">Generate Split Bill</button>
+    </div>
+  </div>
+
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Hash</th>
+    </tr>
+    </thead>
+    <tbody *ngFor="let grocery_list of groceries_hash_list; index as i">
+    <tr>
+      <th scope="row">{{i + 1}}</th>
+      <td>{{grocery_list[0]}}'s hash added</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <form #f="ngForm" (ngSubmit)="add_hash(f);">
+    <div class="mb-3">
+      <input ngModel required type="text" name="name">
+    </div>
+    <div class="mb-3">
+      <textarea ngModel required name="hash" style="width: 100%" rows="5"></textarea>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary float-right">Add Hash</button>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template [ngIf]="groceries_final_list.length > 0">
+  <table class="table table-striped">
+    <thead class="thead-dark">
+    <tr>
+      <th scope="col">Grocery</th>
+      <th scope="col">Total Cost ($)</th>
+      <th scope=" col" *ngFor="let grocery_list of groceries_hash_list">{{grocery_list[0]}} ($)</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let grocery of groceries_final_list[0]; index as i">
+      <th scope="row">{{groceries_final_list[0][i].description}}</th>
+      <th>{{groceries_final_list[0][i].cost}}</th>
+      <th *ngFor="let grocery of groceries_final_list; index as j">{{groceries_final_list[j][i].share_cost}}</th>
+    </tr>
+    <tr class="table-warning">
+      <th></th>
+      <th>{{get_total_cost()}}</th>
+      <th *ngFor="let grocery_list of groceries_hash_list; index as i">{{get_total_share_cost(i)}}</th>
+    </tr>
+    </tbody>
+  </table>
+</ng-template>

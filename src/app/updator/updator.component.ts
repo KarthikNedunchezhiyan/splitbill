@@ -17,7 +17,6 @@ interface Item {
 })
 export class UpdatorComponent implements OnInit {
   groceries: Array<Item> = [];
-  total_share_cost: number = 0;
 
   constructor(config: NgbModalConfig, private modalService: NgbModal, private route: ActivatedRoute) {
     config.backdrop = 'static';
@@ -28,12 +27,11 @@ export class UpdatorComponent implements OnInit {
     this.route.queryParams
       .subscribe(params => {
         let groceries_list = JSON.parse(atob(decodeURIComponent(params['emb'])));
-        for (let i = 0; i < groceries_list.length; i++) {
-          groceries_list[i].share = groceries_list[i].share || 0;
-          this.total_share_cost += groceries_list[i].share;
-        }
+        for (let i = 0; i < groceries_list.length; i++)
+          if (groceries_list[i].share == undefined)
+            groceries_list[i].share = -1;
+
         this.groceries = groceries_list;
-        this.refresh_total_share_cost();
       });
   }
 
@@ -41,22 +39,21 @@ export class UpdatorComponent implements OnInit {
     this.modalService.open(content);
   }
 
-  refresh_total_share_cost() {
-    this.total_share_cost = 0;
-    for (let i = 0; i < this.groceries.length; i++) {
-      let per_share = this.groceries[i].cost / this.groceries[i].quantity;
-      this.total_share_cost += per_share * this.groceries[i].share;
-    }
+  update_share(index: number, item_form: NgForm) {
+    if (item_form.value.split_mode.length)
+      this.groceries[index].share = item_form.value.split_mode === "opt_out" ? 0 : -1;
+    else
+      this.groceries[index].share = item_form.value.share;
   }
 
-  update_share(index: number, item_form: NgForm) {
-    this.groceries[index].share = item_form.value.share;
-    this.refresh_total_share_cost();
+  share_cost(index: number) {
+    return ((this.groceries[index].cost / this.groceries[index].quantity) * this.groceries[index].share).toFixed(2);
   }
 
   serialize_groceries_list() {
     let serialized_groceries_data = encodeURIComponent(btoa(JSON.stringify(this.groceries)));
     console.log(serialized_groceries_data);
-    alert(serialized_groceries_data);
+    navigator.clipboard.writeText(serialized_groceries_data);
+    alert("Hash copied to clipboard!");
   }
 }

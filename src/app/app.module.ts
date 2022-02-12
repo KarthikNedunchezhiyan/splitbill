@@ -9,6 +9,7 @@ import { UpdatorComponent } from './updator/updator.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { FormsModule }   from '@angular/forms';
+import { TallyComponent } from './tally/tally.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { FormsModule }   from '@angular/forms';
     InitiatorComponent,
     NavigationBarComponent,
     UpdatorComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    TallyComponent
   ],
   imports: [
     BrowserModule,
