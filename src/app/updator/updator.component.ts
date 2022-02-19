@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {NgbModal, NgbModalConfig} from "@ng-bootstrap/ng-bootstrap";
 import {NgForm} from "@angular/forms";
+import {ClipboardService} from 'ngx-clipboard';
 
 interface Item {
   description: string;
@@ -18,7 +19,7 @@ interface Item {
 export class UpdatorComponent implements OnInit {
   groceries: Array<Item> = [];
 
-  constructor(config: NgbModalConfig, private modalService: NgbModal, private route: ActivatedRoute) {
+  constructor(config: NgbModalConfig, private modalService: NgbModal, private route: ActivatedRoute, private clipboardService: ClipboardService) {
     config.backdrop = 'static';
     config.keyboard = false;
   }
@@ -53,7 +54,7 @@ export class UpdatorComponent implements OnInit {
   serialize_groceries_list() {
     let serialized_groceries_data = encodeURIComponent(btoa(JSON.stringify(this.groceries)));
     console.log(serialized_groceries_data);
-    navigator.clipboard.writeText(serialized_groceries_data);
-    alert("Hash copied to clipboard!");
+    let copy_status = this.clipboardService.copyFromContent(serialized_groceries_data);
+    alert(copy_status ? "✅ Copied to hash to clipboard" : "⚠️ Unable to copy hash to clipboard!")
   }
 }
