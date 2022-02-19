@@ -55,6 +55,6 @@ export class UpdatorComponent implements OnInit {
     let serialized_groceries_data = encodeURIComponent(btoa(JSON.stringify(this.groceries)));
     console.log(serialized_groceries_data);
     let copy_status = this.clipboardService.copyFromContent(serialized_groceries_data);
-    alert(copy_status ? "✅ Copied to hash to clipboard" : "⚠️ Unable to copy hash to clipboard!")
+    alert(copy_status ? "✅ Copied to hash to clipboard" : "⚠️ Unable to copy hash to clipboard!");
   }
 }

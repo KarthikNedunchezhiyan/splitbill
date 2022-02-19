@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {NgForm} from "@angular/forms";
 import {NgbModal, NgbModalConfig} from '@ng-bootstrap/ng-bootstrap';
+import {ClipboardService} from 'ngx-clipboard';
 
 interface Item {
   description: string;
@@ -18,7 +19,7 @@ export class InitiatorComponent implements OnInit {
   groceries: Array<Item> = [];
   bill_total = 0;
 
-  constructor(config: NgbModalConfig, private modalService: NgbModal) {
+  constructor(config: NgbModalConfig, private modalService: NgbModal, private clipboardService: ClipboardService) {
     config.backdrop = 'static';
     config.keyboard = false;
   }
@@ -46,8 +47,9 @@ export class InitiatorComponent implements OnInit {
   }
 
   serialize_groceries_list() {
-    let serialized_string = encodeURIComponent(btoa(JSON.stringify(this.groceries)));
-    navigator.clipboard.writeText(`/updater?emb=${serialized_string}`);
-    alert("Url copied to clipboard!");
+    let serialized_string = `/updater?emb=${encodeURIComponent(btoa(JSON.stringify(this.groceries)))}`;
+    console.log(serialized_string);
+    let copy_status = this.clipboardService.copyFromContent(serialized_string);
+    alert(copy_status ? "✅ Copied to URL to clipboard" : "⚠️ Unable to copy URL to clipboard!");
   }
 }
